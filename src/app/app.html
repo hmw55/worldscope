@@ -71,7 +71,12 @@
         (indicatorSelected)="selectIndicator($event)"
       />
 
-      <app-trend-panel />
+      <app-trend-panel
+        [selectedIndicator]="selectedIndicator()"
+        [observations]="indicatorHistory()"
+        [isLoading]="isIndicatorHistoryLoading()"
+        [hasError]="hasIndicatorHistoryError()"
+      />
     </aside>
   </main>
 

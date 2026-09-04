@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { forkJoin, map, Observable } from 'rxjs';
 import { CountryIndicator, WorldBankIndicatorApiResponse } from '../models/country-indicator';
+import { IndicatorObservation } from '../models/indicator-observation';
 
 export interface WorldBankCountry {
   id: string;
@@ -161,5 +162,32 @@ export class WorldBankService {
         '%',
       ),
     ]);
+  }
+
+  getIndicatorHistory(
+    countryCode: string,
+    indicatorId: string,
+  ): Observable<IndicatorObservation[]> {
+    return this.http
+      .get<WorldBankIndicatorApiResponse>(
+        `${this.baseUrl}/country/${countryCode}/indicator/${indicatorId}?format=json&date=2000:2030&per_page=100`,
+      )
+      .pipe(
+        map((response) => {
+          const observations = response[1] ?? [];
+
+          return observations
+            .filter(
+              (observation) =>
+                observation.value !== null &&
+                Number.isFinite(Number(observation.date)),
+            )
+            .map((observation) => ({
+              year: Number(observation.date),
+              value: observation.value as number,
+            }))
+            .sort((a, b) => a.year - b.year);
+        }),
+      );
   }
 }

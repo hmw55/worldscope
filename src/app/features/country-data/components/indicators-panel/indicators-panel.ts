@@ -39,4 +39,23 @@ export class IndicatorsPanel {
         }).format(indicator.value);
     }
   }
+
+  indicatorColor(indicator: CountryIndicator): string {
+    switch (indicator.id) {
+      case 'SL.UEM.TOTL.ZS':
+        return 'var(--data-orange)';
+
+      case 'EN.GHG.CO2.PC.CE.AR5':
+        return 'var(--data-pink)';
+
+      case 'SP.URB.TOTL.IN.ZS':
+        return 'var(--data-cyan)';
+
+      case 'IT.NET.USER.ZS':
+        return 'var(--data-purple)';
+
+      default:
+        return 'var(--accent)';
+    }
+  }
 }
