@@ -1,0 +1,23 @@
+.chart-placeholder {
+  position: relative;
+  min-height: 12rem;
+  margin: 1rem;
+  flex: 1;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+  background:
+    linear-gradient(var(--grid-line) 1px, transparent 1px);
+  background-size: 100% 25%;
+}
+
+.chart-line {
+  position: absolute;
+  right: 8%;
+  bottom: 30%;
+  left: 8%;
+  height: 1px;
+  background: var(--accent);
+  box-shadow: 0 0 0.5rem rgb(255 42 234 / 30%);
+  transform: rotate(-8deg);
+}

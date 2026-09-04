@@ -1,20 +1,32 @@
 :root {
   color-scheme: dark;
 
-  --background: #070c1b;
-  --background-soft: #0b1226;
+  // Neutrals
+  --background: #000000;
+  --background-soft: #131313;
+  --surface: #141720;
 
-  --surface: #0d1630;
-  --border: #1a2948;
-  --grid-line: rgb(70 110 170 / 8%);
+  // Structure
+  --border: #511e6c;
+  --grid-line: rgb(255 255 255 / 6%);
 
+  // Text
   --text: #eef5ff;
   --text-muted: #9aabc4;
   --text-dim: #61718d;
 
-  --accent: #2abbff;
-  --accent-soft: rgb(42 187 255 / 8%);
-  --accent-border: rgb(42 187 255 / 25%);
+  // Primary identity
+  --accent: #ff2aea;
+  --accent-soft: rgb(255 42 234 / 8%);
+  --accent-border: rgb(255 42 234 / 28%);
+
+  // Data palette
+  --data-cyan: #27e8ff;
+  --data-green: #39f5a6;
+  --data-yellow: #ffd84a;
+  --data-orange: #ff914d;
+  --data-purple: #a970ff;
+  --data-pink: #ff5fa2;
 
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
@@ -56,4 +68,65 @@ button {
 ::selection {
   background: var(--accent);
   color: var(--background);
+}
+
+.panel {
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 0.65rem;
+  background: var(--surface);
+}
+
+.panel-heading {
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.panel-label {
+  color: var(--text-muted);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.empty-state {
+  display: flex;
+  padding: 2rem 1.25rem;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.empty-state-icon {
+  display: grid;
+  width: 3.25rem;
+  height: 3.25rem;
+  margin-bottom: 1rem;
+  place-items: center;
+  border: 1px solid var(--accent-border);
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 1.4rem;
+}
+
+.empty-state h2 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.empty-state p {
+  max-width: 14rem;
+  margin: 0.6rem 0 0;
+  color: var(--text-dim);
+  font-size: 0.75rem;
+  line-height: 1.6;
 }

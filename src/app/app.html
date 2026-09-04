@@ -29,108 +29,19 @@
 
   <main class="dashboard">
     <aside class="country-column" aria-label="Country information">
-      <section class="panel country-panel">
-        <div class="panel-heading">
-          <span class="panel-label">Country</span>
-        </div>
+      <app-country-panel
+        [selectedCountry]="selectedCountry()"
+        [countryDetails]="countryDetails()"
+        [isLoading]="isCountryLoading()"
+        [hasError]="hasCountryError()"
+      />
 
-        @if (selectedCountry(); as country) {
-          <div class="country-summary">
-            <span class="country-summary-code">
-              {{ country.iso3Code }}
-            </span>
-
-            <h2>{{ country.name }}</h2>
-
-            @if (isCountryLoading()) {
-              <p class="country-status">Loading country data...</p>
-            } @else if (hasCountryError()) {
-              <p class="country-status country-status-error">
-                Country data unavailable.
-              </p>
-            } @else if (countryDetails(); as details) {
-              <dl class="country-details">
-                <div>
-                  <dt>Capital</dt>
-                  <dd>{{ details.capitalCity || '—' }}</dd>
-                </div>
-
-                <div>
-                  <dt>Region</dt>
-                  <dd>{{ details.region }}</dd>
-                </div>
-
-                <div>
-                  <dt>Income Level</dt>
-                  <dd>{{ details.incomeLevel }}</dd>
-                </div>
-
-                <div>
-                  <dt>Coordinates</dt>
-                  <dd>{{ details.latitude }}, {{ details.longitude }}</dd>
-                </div>
-              </dl>
-            } @else {
-              <span class="country-summary-region">
-                {{ country.region }}
-              </span>
-            }
-          </div>
-        } @else {
-          <div class="empty-state">
-            <span class="empty-state-icon" aria-hidden="true">◎</span>
-            <h2>No country selected</h2>
-            <p>Select a country on the map to explore its data.</p>
-          </div>
-        }
-      </section>
-
-      <section class="panel quick-stats-panel">
-        <div class="panel-heading">
-          <span class="panel-label">Quick Stats</span>
-        </div>
-
-        @if (!selectedCountry()) {
-          <div class="stat-placeholder-grid" aria-hidden="true">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        } @else if (areQuickStatsLoading()) {
-          <div class="quick-stats-status">
-            Loading indicators...
-          </div>
-        } @else if (hasQuickStatsError()) {
-          <div class="quick-stats-status quick-stats-error">
-            Indicator data unavailable.
-          </div>
-        } @else {
-          <div class="quick-stats">
-            @for (stat of quickStats(); track stat.id) {
-              <div class="quick-stat">
-                <span class="quick-stat-label">
-                  {{ stat.shortLabel }}
-                </span>
-
-                <strong class="quick-stat-value">
-                  @if (stat.value !== null) {
-                    {{ formatIndicator(stat) }}
-                  } @else {
-                    —
-                  }
-                </strong>
-
-                @if (stat.year !== null) {
-                  <span class="quick-stat-year">
-                    {{ stat.year }}
-                  </span>
-                }
-              </div>
-            }
-          </div>
-        }
-      </section>
+      <app-quick-stats-panel
+        [hasSelection]="selectedCountry() !== null"
+        [stats]="quickStats()"
+        [isLoading]="areQuickStatsLoading()"
+        [hasError]="hasQuickStatsError()"
+      />
     </aside>
 
     <section class="map-column" aria-label="World map">
@@ -151,67 +62,16 @@
     </section>
 
     <aside class="data-column" aria-label="Country indicators">
-      <section class="panel indicators-panel">
-        <div class="panel-heading">
-          <span class="panel-label">Indicators</span>
-        </div>
+      <app-indicators-panel
+        [hasSelection]="selectedCountry() !== null"
+        [indicators]="developmentIndicators()"
+        [selectedIndicator]="selectedIndicator()"
+        [isLoading]="areDevelopmentIndicatorsLoading()"
+        [hasError]="hasDevelopmentIndicatorsError()"
+        (indicatorSelected)="selectIndicator($event)"
+      />
 
-        @if (!selectedCountry()) {
-          <div class="indicator-placeholder">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-          </div>
-        } @else if (areDevelopmentIndicatorsLoading()) {
-          <div class="indicator-status">
-            Loading development indicators...
-          </div>
-        } @else if (hasDevelopmentIndicatorsError()) {
-          <div class="indicator-status indicator-status-error">
-            Indicator data unavailable.
-          </div>
-        } @else {
-          <div class="indicator-list">
-            @for (indicator of developmentIndicators(); track indicator.id) {
-              <button
-                class="indicator-card"
-                type="button"
-                [class.indicator-card-selected]="
-                  selectedIndicator()?.id === indicator.id
-                "
-                (click)="selectIndicator(indicator)"
-              >
-                <span class="indicator-card-label">
-                  {{ indicator.shortLabel }}
-                </span>
-
-                <strong>
-                  {{ formatDevelopmentIndicator(indicator) }}
-                </strong>
-
-                <span class="indicator-card-year">
-                  @if (indicator.year !== null) {
-                    {{ indicator.year }}
-                  } @else {
-                    No data
-                  }
-                </span>
-              </button>
-            }
-          </div>
-        }
-      </section>
-
-      <section class="panel trend-panel">
-        <div class="panel-heading">
-          <span class="panel-label">Historical Trend</span>
-        </div>
-
-        <div class="chart-placeholder" aria-hidden="true">
-          <span class="chart-line"></span>
-        </div>
-      </section>
+      <app-trend-panel />
     </aside>
   </main>
 

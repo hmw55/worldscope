@@ -1,0 +1,55 @@
+<section class="panel country-panel">
+  <div class="panel-heading">
+    <span class="panel-label">Country</span>
+  </div>
+
+  @if (selectedCountry(); as country) {
+    <div class="country-summary">
+      <span class="country-summary-code">
+        {{ country.iso3Code }}
+      </span>
+
+      <h2>{{ country.name }}</h2>
+
+      @if (isLoading()) {
+        <p class="country-status">Loading country data...</p>
+      } @else if (hasError()) {
+        <p class="country-status country-status-error">
+          Country data unavailable.
+        </p>
+      } @else if (countryDetails(); as details) {
+        <dl class="country-details">
+          <div>
+            <dt>Capital</dt>
+            <dd>{{ details.capitalCity || '—' }}</dd>
+          </div>
+
+          <div>
+            <dt>Region</dt>
+            <dd>{{ details.region }}</dd>
+          </div>
+
+          <div>
+            <dt>Income Level</dt>
+            <dd>{{ details.incomeLevel }}</dd>
+          </div>
+
+          <div>
+            <dt>Coordinates</dt>
+            <dd>{{ details.latitude }}, {{ details.longitude }}</dd>
+          </div>
+        </dl>
+      } @else {
+        <span class="country-summary-region">
+          {{ country.region }}
+        </span>
+      }
+    </div>
+  } @else {
+    <div class="empty-state">
+      <span class="empty-state-icon" aria-hidden="true">◎</span>
+      <h2>No country selected</h2>
+      <p>Select a country on the map to explore its data.</p>
+    </div>
+  }
+</section>

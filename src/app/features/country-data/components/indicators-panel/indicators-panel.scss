@@ -1,0 +1,92 @@
+.indicator-placeholder {
+  display: grid;
+  padding: 1rem;
+  flex: 1;
+  gap: 0.75rem;
+}
+
+.indicator-placeholder div {
+  min-height: 2.75rem;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(
+    90deg,
+    var(--background-soft),
+    transparent 70%
+  );
+}
+
+.indicator-list {
+  display: grid;
+}
+
+.indicator-card {
+  display: grid;
+  width: 100%;
+  padding: 0.9rem 1rem;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.25rem 1rem;
+  align-items: center;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background 120ms ease,
+    border-color 120ms ease;
+
+  &:hover {
+    background: var(--accent-soft);
+  }
+
+  &:focus-visible {
+    outline: 1px solid var(--accent);
+    outline-offset: -1px;
+  }
+
+  strong {
+    grid-row: 1 / span 2;
+    grid-column: 2;
+    color: var(--text);
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+}
+
+.indicator-card-selected {
+  background: var(--accent-soft);
+  box-shadow: inset 2px 0 0 var(--accent);
+
+  .indicator-card-label {
+    color: var(--accent);
+  }
+}
+
+.indicator-card-label {
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.indicator-card-year {
+  color: var(--text-dim);
+  font-size: 0.58rem;
+}
+
+.indicator-status {
+  display: grid;
+  min-height: 12rem;
+  padding: 1rem;
+  place-items: center;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  text-align: center;
+}
+
+.indicator-status-error {
+  color: #ff8c8c;
+}

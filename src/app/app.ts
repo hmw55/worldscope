@@ -1,5 +1,9 @@
 import { Component, inject, signal } from '@angular/core';
 
+import { CountryPanel } from './features/country-data/components/country-panel/country-panel';
+import { IndicatorsPanel } from './features/country-data/components/indicators-panel/indicators-panel';
+import { TrendPanel } from './features/country-data/components/trend-panel/trend-panel';
+import { QuickStatsPanel } from './features/country-data/components/quick-stats-panel/quick-stats-panel';
 import { CountryIndicator } from './features/country-data/models/country-indicator';
 import {
   WorldBankCountry,
@@ -10,7 +14,13 @@ import { MapCountry } from './features/map/models/map-country';
 
 @Component({
   selector: 'app-root',
-  imports: [WorldMap],
+  imports: [
+    WorldMap, 
+    CountryPanel, 
+    QuickStatsPanel,
+    IndicatorsPanel,
+    TrendPanel,
+  ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
@@ -124,25 +134,6 @@ export class App {
 
       default:
         return new Intl.NumberFormat('en-US').format(indicator.value);
-    }
-  }
-
-  formatDevelopmentIndicator(indicator: CountryIndicator): string {
-    if (indicator.value === null) {
-      return '—';
-    }
-
-    switch (indicator.unit) {
-      case '%':
-        return `${indicator.value.toFixed(1)}%`;
-
-      case 't':
-        return `${indicator.value.toFixed(1)} t`;
-
-      default:
-        return new Intl.NumberFormat('en-US', {
-          maximumFractionDigits: 1,
-        }).format(indicator.value);
     }
   }
 }
