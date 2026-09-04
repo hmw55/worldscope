@@ -1,0 +1,71 @@
+.country-summary {
+  display: grid;
+  justify-items: center;
+  gap: 0.35rem;
+  padding: 1.25rem;
+  text-align: center;
+
+  h2 {
+    margin: 0;
+    color: var(--text);
+    font-size: 1.35rem;
+    font-weight: 600;
+    line-height: 1.15;
+  }
+}
+
+.country-summary-code {
+  color: var(--accent);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.country-summary-region {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+
+.country-status {
+  margin: 0.75rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+
+.country-status-error {
+  color: #ff8c8c;
+}
+
+.country-details {
+  display: grid;
+  gap: 0;
+  width: 100%;
+  margin: 1rem 0 0;
+  text-align: center;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.8rem 0;
+    border-top: 1px solid var(--border);
+  }
+
+  dt {
+    color: var(--text-dim);
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  dd {
+    margin: 0;
+    color: var(--text);
+    font-size: 0.78rem;
+    line-height: 1.4;
+    text-align: center;
+  }
+}

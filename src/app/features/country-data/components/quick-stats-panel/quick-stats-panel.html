@@ -1,0 +1,42 @@
+<section class="panel quick-stats-panel">
+  <div class="panel-heading">
+    <span class="panel-label">Quick Stats</span>
+  </div>
+
+  @if (!hasSelection()) {
+    <div class="stat-placeholder-grid" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  } @else if (isLoading()) {
+    <div class="quick-stats-status">
+      Loading indicators...
+    </div>
+  } @else if (hasError()) {
+    <div class="quick-stats-status quick-stats-error">
+      Indicator data unavailable.
+    </div>
+  } @else {
+    <div class="quick-stats">
+      @for (stat of stats(); track stat.id) {
+        <div class="quick-stat">
+          <span class="quick-stat-label">
+            {{ stat.shortLabel }}
+          </span>
+
+          <strong class="quick-stat-value">
+            {{ formatIndicator(stat) }}
+          </strong>
+
+          @if (stat.year !== null) {
+            <span class="quick-stat-year">
+              {{ stat.year }}
+            </span>
+          }
+        </div>
+      }
+    </div>
+  }
+</section>

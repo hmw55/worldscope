@@ -1,0 +1,51 @@
+<section class="panel indicators-panel">
+  <div class="panel-heading">
+    <span class="panel-label">Indicators</span>
+  </div>
+
+  @if (!hasSelection()) {
+    <div class="indicator-placeholder">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  } @else if (isLoading()) {
+    <div class="indicator-status">
+      Loading development indicators...
+    </div>
+  } @else if (hasError()) {
+    <div class="indicator-status indicator-status-error">
+      Indicator data unavailable.
+    </div>
+  } @else {
+    <div class="indicator-list">
+      @for (indicator of indicators(); track indicator.id) {
+        <button
+          class="indicator-card"
+          type="button"
+          [class.indicator-card-selected]="
+            selectedIndicator()?.id === indicator.id
+          "
+          (click)="selectIndicator(indicator)"
+        >
+          <span class="indicator-card-label">
+            {{ indicator.shortLabel }}
+          </span>
+
+          <strong>
+            {{ formatIndicator(indicator) }}
+          </strong>
+
+          <span class="indicator-card-year">
+            @if (indicator.year !== null) {
+              {{ indicator.year }}
+            } @else {
+              No data
+            }
+          </span>
+        </button>
+      }
+    </div>
+  }
+</section>
