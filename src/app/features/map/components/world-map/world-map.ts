@@ -1,16 +1,24 @@
 import { HttpClient } from '@angular/common/http';
 import {
   Component,
+  ElementRef,
   inject,
   input,
   OnInit,
   output,
   signal,
+  ViewChild,
 } from '@angular/core';
 import {
   geoEqualEarth,
   geoPath,
 } from 'd3-geo';
+import { select } from 'd3-selection';
+import {
+  zoom,
+  ZoomBehavior,
+  zoomIdentity,
+} from 'd3-zoom';
 
 import {
   CountryFeature,
@@ -26,6 +34,21 @@ import { MapCountry } from '../../models/map-country';
 })
 export class WorldMap implements OnInit {
   private readonly http = inject(HttpClient);
+
+  private zoomBehavior:
+    | ZoomBehavior<SVGSVGElement, unknown>
+    | null = null;
+
+  private mapSvgElement: SVGSVGElement | null = null;
+
+  @ViewChild('mapSvg')
+  set mapSvg(element: ElementRef<SVGSVGElement> | undefined) {
+    if (!element) {
+      return;
+    }
+
+    this.initializeZoom(element.nativeElement);
+  }
 
   readonly selectedCountryCode = input<string | null>(null);
 
@@ -47,6 +70,63 @@ export class WorldMap implements OnInit {
     }
 
     this.countrySelected.emit(country);
+  }
+
+  zoomIn(): void {
+    if (!this.zoomBehavior || !this.mapSvgElement) {
+      return;
+    }
+
+    select(this.mapSvgElement)
+      .call(this.zoomBehavior.scaleBy, 1.5);
+  }
+
+  zoomOut(): void {
+    if (!this.zoomBehavior || !this.mapSvgElement) {
+      return;
+    }
+
+    select(this.mapSvgElement)
+      .call(this.zoomBehavior.scaleBy, 1 / 1.5);
+  }
+
+  resetZoom(): void {
+    if (!this.zoomBehavior || !this.mapSvgElement) {
+      return;
+    }
+
+    select(this.mapSvgElement)
+      .call(this.zoomBehavior.transform, zoomIdentity);
+  }
+
+  private initializeZoom(svg: SVGSVGElement): void {
+    this.mapSvgElement = svg;
+
+    const countryGroup =
+      svg.querySelector<SVGGElement>('.map-countries');
+
+    if (!countryGroup) {
+      return;
+    }
+
+    this.zoomBehavior = zoom<SVGSVGElement, unknown>()
+      .scaleExtent([1, 8])
+      .extent([
+        [0, 0],
+        [960, 500],
+      ])
+      .translateExtent([
+        [0, 0],
+        [960, 500],
+      ])
+      .on('zoom', (event) => {
+        countryGroup.setAttribute(
+          'transform',
+          event.transform.toString(),
+        );
+      });
+
+    select(svg).call(this.zoomBehavior);
   }
 
   private loadMap(): void {

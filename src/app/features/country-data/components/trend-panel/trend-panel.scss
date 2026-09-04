@@ -1,10 +1,72 @@
 :host {
   display: block;
   min-height: 0;
+  height: 100%;
 }
 
 .trend-panel {
   min-height: 16rem;
+  height: 100%;
+}
+
+.trend-empty {
+  display: flex;
+  flex: 1;
+  min-height: 16rem;
+  padding: 1rem;
+  flex-direction: column;
+}
+
+.trend-empty-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  strong {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  span {
+    color: var(--text-dim);
+    font-size: 0.7rem;
+  }
+}
+
+.trend-empty-value {
+  color: var(--text-dim) !important;
+  font-size: 1rem !important;
+  font-weight: 700;
+}
+
+.trend-chart-empty {
+  margin-top: 0.75rem;
+  opacity: 0.5;
+}
+
+.trend-placeholder-line {
+  fill: none;
+  stroke: var(--text-dim);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 4 5;
+  opacity: 0.35;
+}
+
+.trend-empty-message {
+  margin: auto 0 0;
+  color: var(--text-dim);
+  font-size: 0.65rem;
+  text-align: center;
 }
 
 .trend-content {

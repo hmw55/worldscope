@@ -4,11 +4,30 @@
   </div>
 
   @if (!hasSelection()) {
-    <div class="indicator-placeholder">
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
+    <div class="indicator-list indicator-list-placeholder">
+      <div class="indicator-card-placeholder">
+        <span>Unemployment</span>
+        <strong>—</strong>
+        <small>Select country</small>
+      </div>
+
+      <div class="indicator-card-placeholder">
+        <span>CO₂ per capita</span>
+        <strong>—</strong>
+        <small>Select country</small>
+      </div>
+
+      <div class="indicator-card-placeholder">
+        <span>Urban population</span>
+        <strong>—</strong>
+        <small>Select country</small>
+      </div>
+
+      <div class="indicator-card-placeholder">
+        <span>Internet users</span>
+        <strong>—</strong>
+        <small>Select country</small>
+      </div>
     </div>
   } @else if (isLoading()) {
     <div class="indicator-status">

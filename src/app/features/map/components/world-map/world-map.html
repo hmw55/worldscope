@@ -17,30 +17,65 @@
     </div>
   } @else {
     <svg
+      #mapSvg
       class="map"
       viewBox="0 0 960 500"
       role="group"
-      aria-label="Interactive world map"
+      aria-label="Interactive world map. Scroll to zoom and drag to pan."
     >
-      @for (country of countries(); track country.name) {
-        <path
-          class="country"
-          [class.country-selected]="selectedCountryCode() === country.iso3Code"
-          [class.country-unavailable]="!country.iso3Code"
-          [attr.d]="country.path"
-          [attr.aria-label]="country.name"
-          [attr.tabindex]="country.iso3Code ? 0 : -1"
-          role="button"
-          (mouseenter)="hoveredCountry.set(country.name)"
-          (mouseleave)="hoveredCountry.set(null)"
-          (focus)="hoveredCountry.set(country.name)"
-          (blur)="hoveredCountry.set(null)"
-          (click)="selectCountry(country)"
-          (keydown.enter)="selectCountry(country)"
-          (keydown.space)="selectCountry(country); $event.preventDefault()"
-        />
-      }
+      <g class="map-countries">
+        @for (country of countries(); track country.name) {
+          <path
+            class="country"
+            [class.country-selected]="selectedCountryCode() === country.iso3Code"
+            [class.country-unavailable]="!country.iso3Code"
+            [attr.d]="country.path"
+            [attr.aria-label]="country.name"
+            [attr.tabindex]="country.iso3Code ? 0 : -1"
+            role="button"
+            (mouseenter)="hoveredCountry.set(country.name)"
+            (mouseleave)="hoveredCountry.set(null)"
+            (focus)="hoveredCountry.set(country.name)"
+            (blur)="hoveredCountry.set(null)"
+            (click)="selectCountry(country)"
+            (keydown.enter)="selectCountry(country)"
+            (keydown.space)="selectCountry(country); $event.preventDefault()"
+          />
+        }
+      </g>
     </svg>
+
+    <div class="map-controls" aria-label="Map zoom controls">
+      <button
+        type="button"
+        class="map-control"
+        aria-label="Zoom in"
+        title="Zoom in"
+        (click)="zoomIn()"
+      >
+        +
+      </button>
+
+      <button
+        type="button"
+        class="map-control"
+        aria-label="Zoom out"
+        title="Zoom out"
+        (click)="zoomOut()"
+      >
+        −
+      </button>
+
+      <button
+        type="button"
+        class="map-control map-control-reset"
+        aria-label="Reset map view"
+        title="Reset map view"
+        (click)="resetZoom()"
+      >
+        Reset
+      </button>
+    </div>
 
     @if (hoveredCountry(); as countryName) {
       <div class="country-label">
