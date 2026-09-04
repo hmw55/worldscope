@@ -38,11 +38,19 @@
     border-color 120ms ease;
 
   &:hover {
-    background: var(--accent-soft);
+    background: color-mix(
+      in srgb,
+      var(--indicator-color) 10%,
+      transparent
+    );
+
+    .indicator-card-label {
+      color: var(--indicator-color);
+    }
   }
 
   &:focus-visible {
-    outline: 1px solid var(--accent);
+    outline: 1px solid var(--indicator-color);
     outline-offset: -1px;
   }
 
@@ -56,11 +64,16 @@
 }
 
 .indicator-card-selected {
-  background: var(--accent-soft);
-  box-shadow: inset 2px 0 0 var(--accent);
+  background: color-mix(
+    in srgb,
+    var(--indicator-color) 10%,
+    transparent
+  );
+
+  box-shadow: inset 2px 0 0 var(--indicator-color);
 
   .indicator-card-label {
-    color: var(--accent);
+    color: var(--indicator-color);
   }
 }
 

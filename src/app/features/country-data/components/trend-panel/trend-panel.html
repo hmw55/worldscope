@@ -3,7 +3,131 @@
     <span class="panel-label">Historical Trend</span>
   </div>
 
-  <div class="chart-placeholder" aria-hidden="true">
-    <span class="chart-line"></span>
-  </div>
+  @if (!selectedIndicator()) {
+    <div class="empty-state">
+      <span class="empty-state-icon">⌁</span>
+      <h2>No indicator selected</h2>
+      <p>Select an indicator to view historical data.</p>
+    </div>
+  } @else if (isLoading()) {
+    <div class="trend-status">
+      Loading historical data...
+    </div>
+  } @else if (hasError()) {
+    <div class="trend-status">
+      Historical data unavailable.
+    </div>
+  } @else if (observations().length < 2) {
+    <div class="trend-status">
+      Not enough historical data to display a trend.
+    </div>
+  } @else {
+    <div
+      class="trend-content"
+      [style.--trend-color]="trendColor()"
+    >
+      <div class="trend-header">
+        <div>
+          <strong>{{ selectedIndicator()?.shortLabel }}</strong>
+          <span>
+            {{ observations()[0].year }}
+            –
+            {{ observations()[observations().length - 1].year }}
+          </span>
+        </div>
+
+        <span class="trend-latest">
+          {{
+            formatValue(
+              observations()[observations().length - 1].value
+            )
+          }}
+        </span>
+      </div>
+
+      <svg
+        class="trend-chart"
+        viewBox="0 0 320 140"
+        role="img"
+        [attr.aria-label]="
+          selectedIndicator()?.label + ' historical trend'
+        "
+      >
+        <line
+          class="grid-line"
+          x1="16"
+          y1="35"
+          x2="304"
+          y2="35"
+        />
+
+        <line
+          class="grid-line"
+          x1="16"
+          y1="70"
+          x2="304"
+          y2="70"
+        />
+
+        <line
+          class="grid-line"
+          x1="16"
+          y1="105"
+          x2="304"
+          y2="105"
+        />
+
+        <polyline
+          class="trend-line"
+          [attr.points]="chartPoints()"
+        />
+
+        @for (point of chartPointData(); track point.year) {
+          <circle
+            class="trend-point"
+            [attr.cx]="point.x"
+            [attr.cy]="point.y"
+            r="2.5"
+            tabindex="0"
+            [attr.aria-label]="point.year + ': ' + formatValue(point.value)"
+            (mouseenter)="showPoint(point)"
+            (mouseleave)="hidePoint()"
+            (focus)="showPoint(point)"
+            (blur)="hidePoint()"
+          />
+        }
+
+        @if (activePoint(); as point) {
+          <g
+            class="trend-tooltip"
+            [attr.transform]="'translate(' + point.x + ' ' + point.y + ')'"
+          >
+            <rect
+              x="-28"
+              y="-34"
+              width="56"
+              height="24"
+              rx="4"
+            />
+
+            <text
+              x="0"
+              y="-24"
+              text-anchor="middle"
+            >
+              {{ point.year }}
+            </text>
+
+            <text
+              x="0"
+              y="-15"
+              text-anchor="middle"
+            >
+              {{ formatValue(point.value) }}
+            </text>
+          </g>
+        }
+      </svg>
+    </div>
+  }
 </section>

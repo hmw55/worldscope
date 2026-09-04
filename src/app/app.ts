@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 
 import { CountryPanel } from './features/country-data/components/country-panel/country-panel';
 import { IndicatorsPanel } from './features/country-data/components/indicators-panel/indicators-panel';
+import { IndicatorObservation } from './features/country-data/models/indicator-observation';
 import { TrendPanel } from './features/country-data/components/trend-panel/trend-panel';
 import { QuickStatsPanel } from './features/country-data/components/quick-stats-panel/quick-stats-panel';
 import { CountryIndicator } from './features/country-data/models/country-indicator';
@@ -41,6 +42,10 @@ export class App {
   readonly hasDevelopmentIndicatorsError = signal(false);
   readonly selectedIndicator = signal<CountryIndicator | null>(null);
 
+  readonly indicatorHistory = signal<IndicatorObservation[]>([]);
+  readonly isIndicatorHistoryLoading = signal(false);
+  readonly hasIndicatorHistoryError = signal(false);
+
   onCountrySelected(country: MapCountry): void {
     this.selectedCountry.set(country);
 
@@ -48,10 +53,12 @@ export class App {
     this.quickStats.set([]);
     this.developmentIndicators.set([]);
     this.selectedIndicator.set(null);
+    this.indicatorHistory.set([]);
 
     this.hasCountryError.set(false);
     this.hasQuickStatsError.set(false);
     this.hasDevelopmentIndicatorsError.set(false);
+    this.hasIndicatorHistoryError.set(false);
 
     if (!country.iso2Code) {
       return;
@@ -88,8 +95,18 @@ export class App {
       .subscribe({
         next: (indicators) => {
           this.developmentIndicators.set(indicators);
-          this.selectedIndicator.set(indicators[0] ?? null);
+
+          const firstIndicator = indicators[0] ?? null;
+          this.selectedIndicator.set(firstIndicator);
+
           this.areDevelopmentIndicatorsLoading.set(false);
+
+          if (firstIndicator) {
+            this.loadIndicatorHistory(
+              country.iso2Code!,
+              firstIndicator.id,
+            );
+          }
         },
         error: () => {
           this.hasDevelopmentIndicatorsError.set(true);
@@ -100,40 +117,35 @@ export class App {
 
   selectIndicator(indicator: CountryIndicator): void {
     this.selectedIndicator.set(indicator);
+
+    const countryCode = this.selectedCountry()?.iso2Code;
+
+    if (!countryCode) {
+      return;
+    }
+
+    this.loadIndicatorHistory(countryCode, indicator.id);
   }
 
-  formatIndicator(indicator: CountryIndicator): string {
-    if (indicator.value === null) {
-      return '—';
-    }
+  private loadIndicatorHistory(
+    countryCode: string,
+    indicatorId: string,
+  ): void {
+    this.indicatorHistory.set([]);
+    this.hasIndicatorHistoryError.set(false);
+    this.isIndicatorHistoryLoading.set(true);
 
-    switch (indicator.id) {
-      case 'SP.POP.TOTL':
-        return new Intl.NumberFormat('en-US', {
-          notation: 'compact',
-          maximumFractionDigits: 1,
-        }).format(indicator.value);
-
-      case 'NY.GDP.MKTP.CD':
-        return new Intl.NumberFormat('en-US', {
-          style: 'currency',
-          currency: 'USD',
-          notation: 'compact',
-          maximumFractionDigits: 2,
-        }).format(indicator.value);
-
-      case 'NY.GDP.PCAP.CD':
-        return new Intl.NumberFormat('en-US', {
-          style: 'currency',
-          currency: 'USD',
-          maximumFractionDigits: 0,
-        }).format(indicator.value);
-
-      case 'SP.DYN.LE00.IN':
-        return `${indicator.value.toFixed(1)} yrs`;
-
-      default:
-        return new Intl.NumberFormat('en-US').format(indicator.value);
-    }
+    this.worldBankService
+      .getIndicatorHistory(countryCode, indicatorId)
+      .subscribe({
+        next: (history) => {
+          this.indicatorHistory.set(history);
+          this.isIndicatorHistoryLoading.set(false);
+        },
+        error: () => {
+          this.hasIndicatorHistoryError.set(true);
+          this.isIndicatorHistoryLoading.set(false);
+        },
+      });
   }
 }

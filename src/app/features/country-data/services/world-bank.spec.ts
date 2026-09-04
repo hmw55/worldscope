@@ -6,6 +6,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
 import { WorldBankService } from './world-bank';
+import { IndicatorObservation } from '../models/indicator-observation';
 
 describe('WorldBankService', () => {
   let service: WorldBankService;
@@ -330,5 +331,72 @@ describe('WorldBankService', () => {
         ],
       ]);
     });
+  });
+
+  it('returns historical indicator observations in chronological order', () => {
+    let result: IndicatorObservation[] | undefined;
+
+    service
+      .getIndicatorHistory('US', 'SL.UEM.TOTL.ZS')
+      .subscribe((observations) => {
+        result = observations;
+      });
+
+    const request = httpTesting.expectOne(
+      'https://api.worldbank.org/v2/country/US/indicator/SL.UEM.TOTL.ZS?format=json&date=2000:2030&per_page=100',
+    );
+
+    request.flush([
+      {},
+      [
+        {
+          indicator: {
+            id: 'SL.UEM.TOTL.ZS',
+            value: 'Unemployment, total',
+          },
+          country: {
+            id: 'US',
+            value: 'United States',
+          },
+          countryiso3code: 'USA',
+          date: '2024',
+          value: 4.1,
+          unit: '',
+        },
+        {
+          indicator: {
+            id: 'SL.UEM.TOTL.ZS',
+            value: 'Unemployment, total',
+          },
+          country: {
+            id: 'US',
+            value: 'United States',
+          },
+          countryiso3code: 'USA',
+          date: '2023',
+          value: 3.6,
+          unit: '',
+        },
+        {
+          indicator: {
+            id: 'SL.UEM.TOTL.ZS',
+            value: 'Unemployment, total',
+          },
+          country: {
+            id: 'US',
+            value: 'United States',
+          },
+          countryiso3code: 'USA',
+          date: '2022',
+          value: null,
+          unit: '',
+        },
+      ],
+    ]);
+
+    expect(result).toEqual([
+      { year: 2023, value: 3.6 },
+      { year: 2024, value: 4.1 },
+    ]);
   });
 });

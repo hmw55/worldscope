@@ -24,6 +24,7 @@
         <button
           class="indicator-card"
           type="button"
+          [style.--indicator-color]="indicatorColor(indicator)"
           [class.indicator-card-selected]="
             selectedIndicator()?.id === indicator.id
           "
