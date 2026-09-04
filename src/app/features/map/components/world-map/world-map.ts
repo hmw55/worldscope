@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import {
   Component,
   inject,
+  input,
   OnInit,
   output,
   signal,
@@ -26,10 +27,12 @@ import { MapCountry } from '../../models/map-country';
 export class WorldMap implements OnInit {
   private readonly http = inject(HttpClient);
 
+  readonly selectedCountryCode = input<string | null>(null);
+
   readonly countrySelected = output<MapCountry>();
+  readonly countriesLoaded = output<MapCountry[]>();
 
   readonly countries = signal<MapCountry[]>([]);
-  readonly selectedCountryCode = signal<string | null>(null);
   readonly hoveredCountry = signal<string | null>(null);
   readonly isLoading = signal(true);
   readonly hasError = signal(false);
@@ -43,7 +46,6 @@ export class WorldMap implements OnInit {
       return;
     }
 
-    this.selectedCountryCode.set(country.iso3Code);
     this.countrySelected.emit(country);
   }
 
@@ -52,7 +54,10 @@ export class WorldMap implements OnInit {
       .get<CountryFeatureCollection>('/data/countries.geojson')
       .subscribe({
         next: (data) => {
-          this.countries.set(this.createCountries(data.features));
+          const countries = this.createCountries(data.features);
+
+          this.countries.set(countries);
+          this.countriesLoaded.emit(countries);
           this.isLoading.set(false);
         },
         error: () => {

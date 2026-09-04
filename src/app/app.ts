@@ -2,22 +2,24 @@ import { Component, inject, signal } from '@angular/core';
 
 import { CountryPanel } from './features/country-data/components/country-panel/country-panel';
 import { IndicatorsPanel } from './features/country-data/components/indicators-panel/indicators-panel';
-import { IndicatorObservation } from './features/country-data/models/indicator-observation';
 import { TrendPanel } from './features/country-data/components/trend-panel/trend-panel';
 import { QuickStatsPanel } from './features/country-data/components/quick-stats-panel/quick-stats-panel';
 import { CountryIndicator } from './features/country-data/models/country-indicator';
+import { IndicatorObservation } from './features/country-data/models/indicator-observation';
 import {
   WorldBankCountry,
   WorldBankService,
 } from './features/country-data/services/world-bank';
 import { WorldMap } from './features/map/components/world-map/world-map';
 import { MapCountry } from './features/map/models/map-country';
+import { CountrySearch } from './features/search/components/country-search/country-search';
 
 @Component({
   selector: 'app-root',
   imports: [
-    WorldMap, 
-    CountryPanel, 
+    WorldMap,
+    CountrySearch,
+    CountryPanel,
     QuickStatsPanel,
     IndicatorsPanel,
     TrendPanel,
@@ -27,6 +29,8 @@ import { MapCountry } from './features/map/models/map-country';
 })
 export class App {
   private readonly worldBankService = inject(WorldBankService);
+
+  readonly countries = signal<MapCountry[]>([]);
 
   readonly selectedCountry = signal<MapCountry | null>(null);
   readonly countryDetails = signal<WorldBankCountry | null>(null);
@@ -45,6 +49,18 @@ export class App {
   readonly indicatorHistory = signal<IndicatorObservation[]>([]);
   readonly isIndicatorHistoryLoading = signal(false);
   readonly hasIndicatorHistoryError = signal(false);
+
+  onCountriesLoaded(countries: MapCountry[]): void {
+    this.countries.set(
+      countries
+        .filter(
+          (country) =>
+            country.iso2Code !== null &&
+            country.iso3Code !== null,
+        )
+        .sort((a, b) => a.name.localeCompare(b.name)),
+    );
+  }
 
   onCountrySelected(country: MapCountry): void {
     this.selectedCountry.set(country);

@@ -79,43 +79,6 @@
   text-transform: uppercase;
 }
 
-.search-shell {
-  display: flex;
-  height: 2.6rem;
-  padding: 0 0.8rem;
-  align-items: center;
-  gap: 0.6rem;
-  border: 1px solid var(--border);
-  border-radius: 0.5rem;
-  background: var(--background);
-}
-
-.search-icon {
-  color: var(--text-dim);
-  font-size: 1.2rem;
-}
-
-.search-shell input {
-  min-width: 0;
-  flex: 1;
-  border: 0;
-  outline: 0;
-  background: transparent;
-  color: var(--text);
-}
-
-.search-shell input::placeholder {
-  color: var(--text-dim);
-}
-
-.coming-soon {
-  color: var(--text-dim);
-  font-size: 0.6rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
 .topbar-nav {
   display: flex;
   justify-content: flex-end;
@@ -136,7 +99,10 @@
   display: grid;
   min-height: 0;
   padding: 1rem;
-  grid-template-columns: minmax(13rem, 0.72fr) minmax(30rem, 2.3fr) minmax(15rem, 0.85fr);
+  grid-template-columns:
+    minmax(13rem, 0.72fr)
+    minmax(30rem, 2.3fr)
+    minmax(15rem, 0.85fr);
   gap: 1rem;
 }
 
@@ -194,9 +160,20 @@
   min-height: 35rem;
   place-items: center;
   background:
-    radial-gradient(circle at center, rgb(255 42 234 / 7%), transparent 40%),
-    linear-gradient(var(--grid-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    radial-gradient(
+      circle at center,
+      rgb(255 42 234 / 7%),
+      transparent 40%
+    ),
+    linear-gradient(
+      var(--grid-line) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      var(--grid-line) 1px,
+      transparent 1px
+    );
   background-size:
     auto,
     3rem 3rem,
@@ -234,7 +211,9 @@
   }
 
   .dashboard {
-    grid-template-columns: minmax(12rem, 0.8fr) minmax(28rem, 2fr);
+    grid-template-columns:
+      minmax(12rem, 0.8fr)
+      minmax(28rem, 2fr);
   }
 
   .data-column {
@@ -251,7 +230,7 @@
     gap: 0.75rem;
   }
 
-  .search-shell {
+  app-country-search {
     grid-column: 1 / -1;
     grid-row: 2;
   }
