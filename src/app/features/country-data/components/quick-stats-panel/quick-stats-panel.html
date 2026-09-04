@@ -4,11 +4,30 @@
   </div>
 
   @if (!hasSelection()) {
-    <div class="stat-placeholder-grid" aria-hidden="true">
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
+    <div class="quick-stats quick-stats-placeholder" aria-label="Quick stats">
+      <div class="quick-stat">
+        <span class="quick-stat-label">Population</span>
+        <strong class="quick-stat-placeholder-value">—</strong>
+        <span class="quick-stat-placeholder-year">Select country</span>
+      </div>
+
+      <div class="quick-stat">
+        <span class="quick-stat-label">GDP</span>
+        <strong class="quick-stat-placeholder-value">—</strong>
+        <span class="quick-stat-placeholder-year">Select country</span>
+      </div>
+
+      <div class="quick-stat">
+        <span class="quick-stat-label">GDP per capita</span>
+        <strong class="quick-stat-placeholder-value">—</strong>
+        <span class="quick-stat-placeholder-year">Select country</span>
+      </div>
+
+      <div class="quick-stat">
+        <span class="quick-stat-label">Life expectancy</span>
+        <strong class="quick-stat-placeholder-value">—</strong>
+        <span class="quick-stat-placeholder-year">Select country</span>
+      </div>
     </div>
   } @else if (isLoading()) {
     <div class="quick-stats-status">

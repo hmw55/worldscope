@@ -1,22 +1,53 @@
-.indicator-placeholder {
-  display: grid;
-  padding: 1rem;
-  flex: 1;
-  gap: 0.75rem;
+:host {
+  display: block;
+  min-height: 0;
+  height: 100%;
 }
 
-.indicator-placeholder div {
-  min-height: 2.75rem;
+.indicator-panel {
+  height: 100%;
+}
+
+.indicator-list-placeholder {
+  flex: 1;
+}
+
+.indicator-card-placeholder {
+  display: grid;
+  width: 100%;
+  padding: 0.9rem 1rem;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.25rem 1rem;
+  align-items: center;
   border-bottom: 1px solid var(--border);
-  background: linear-gradient(
-    90deg,
-    var(--background-soft),
-    transparent 70%
-  );
+
+  span {
+    overflow: hidden;
+    color: var(--text-muted);
+    font-size: 0.68rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  strong {
+    grid-row: 1 / span 2;
+    grid-column: 2;
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  small {
+    color: var(--text-dim);
+    font-size: 0.58rem;
+  }
 }
 
 .indicator-list {
   display: grid;
+  flex: 1;
+  min-height: 0;
+  grid-template-rows: repeat(4, minmax(0, 1fr));
 }
 
 .indicator-card {
