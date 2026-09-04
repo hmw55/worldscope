@@ -1,0 +1,144 @@
+:host {
+  display: block;
+}
+
+.about-section {
+  padding: 4rem 1.5rem;
+  border-top: 1px solid var(--border);
+  background: var(--background);
+}
+
+.about-heading {
+  width: min(100%, 52rem);
+  margin: 0 auto 2.5rem;
+  text-align: center;
+
+  h2 {
+    margin: 0.6rem 0 0;
+    color: var(--text);
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+  }
+
+  p {
+    max-width: 42rem;
+    margin: 1rem auto 0;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+}
+
+.about-grid {
+  display: grid;
+  width: min(100%, 72rem);
+  margin: 0 auto;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.about-card {
+  min-width: 0;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: 0.65rem;
+  background: var(--surface);
+  text-align: center;
+
+  h3 {
+    margin: 0.8rem 0 0;
+    color: var(--text);
+    font-size: 1rem;
+  }
+
+  p {
+    margin: 0.65rem 0 0;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    line-height: 1.65;
+  }
+}
+
+.about-card-index {
+  color: var(--accent);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.project-origin {
+  width: min(100%, 52rem);
+  margin: 3rem auto 0;
+  padding: 2.5rem 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+
+  h3 {
+    margin: 0.6rem 0 0;
+    color: var(--text);
+    font-size: 1.35rem;
+    letter-spacing: -0.025em;
+  }
+
+  p {
+    max-width: 44rem;
+    margin: 0.9rem auto 0;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    line-height: 1.7;
+  }
+}
+
+.project-link {
+  display: inline-flex;
+  margin-top: 1.25rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-decoration: none;
+
+  span {
+    transition: transform 120ms ease;
+  }
+
+  &:hover span,
+  &:focus-visible span {
+    transform: translateX(0.25rem);
+  }
+
+  &:focus-visible {
+    outline: 1px solid var(--accent);
+    outline-offset: 0.3rem;
+    border-radius: 0.15rem;
+  }
+}
+
+.about-footer {
+  width: min(100%, 72rem);
+  margin: 2rem auto 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 0.68rem;
+  line-height: 1.6;
+  text-align: center;
+
+  p {
+    margin: 0;
+  }
+}
+
+@media (max-width: 720px) {
+  .about-section {
+    padding: 3rem 1rem;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+}

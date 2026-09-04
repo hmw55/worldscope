@@ -1,5 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 
+import { AboutSection } from './features/about/components/about-section/about-section';
 import { CountryPanel } from './features/country-data/components/country-panel/country-panel';
 import { IndicatorsPanel } from './features/country-data/components/indicators-panel/indicators-panel';
 import { TrendPanel } from './features/country-data/components/trend-panel/trend-panel';
@@ -23,6 +24,7 @@ import { CountrySearch } from './features/search/components/country-search/count
     QuickStatsPanel,
     IndicatorsPanel,
     TrendPanel,
+    AboutSection,
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
