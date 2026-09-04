@@ -77,4 +77,202 @@ describe('WorldBankService', () => {
       ],
     ]);
   });
+
+  it('should return the latest non-null indicator value', () => {
+    service
+      .getLatestIndicator(
+        'US',
+        'SP.POP.TOTL',
+        'Population',
+        'Population',
+        'people',
+      )
+      .subscribe((indicator) => {
+        expect(indicator).toEqual({
+          id: 'SP.POP.TOTL',
+          label: 'Population',
+          shortLabel: 'Population',
+          unit: 'people',
+          value: 340110988,
+          year: 2023,
+        });
+      });
+
+    const request = httpTesting.expectOne(
+      'https://api.worldbank.org/v2/country/US/indicator/SP.POP.TOTL?format=json&date=2015:2030&per_page=100',
+    );
+
+    expect(request.request.method).toBe('GET');
+
+    request.flush([
+      {
+        page: 1,
+        pages: 1,
+        per_page: 100,
+        total: 3,
+      },
+      [
+        {
+          indicator: {
+            id: 'SP.POP.TOTL',
+            value: 'Population, total',
+          },
+          country: {
+            id: 'US',
+            value: 'United States',
+          },
+          countryiso3code: 'USA',
+          date: '2025',
+          value: null,
+          unit: '',
+        },
+        {
+          indicator: {
+            id: 'SP.POP.TOTL',
+            value: 'Population, total',
+          },
+          country: {
+            id: 'US',
+            value: 'United States',
+          },
+          countryiso3code: 'USA',
+          date: '2024',
+          value: null,
+          unit: '',
+        },
+        {
+          indicator: {
+            id: 'SP.POP.TOTL',
+            value: 'Population, total',
+          },
+          country: {
+            id: 'US',
+            value: 'United States',
+          },
+          countryiso3code: 'USA',
+          date: '2023',
+          value: 340110988,
+          unit: '',
+        },
+      ],
+    ]);
+  });
+
+  it('should return null values when indicator data is unavailable', () => {
+    service
+      .getLatestIndicator(
+        'US',
+        'SP.TEST',
+        'Test Indicator',
+        'Test',
+        'units',
+      )
+      .subscribe((indicator) => {
+        expect(indicator).toEqual({
+          id: 'SP.TEST',
+          label: 'Test Indicator',
+          shortLabel: 'Test',
+          unit: 'units',
+          value: null,
+          year: null,
+        });
+      });
+
+    const request = httpTesting.expectOne(
+      'https://api.worldbank.org/v2/country/US/indicator/SP.TEST?format=json&date=2015:2030&per_page=100',
+    );
+
+    request.flush([
+      {
+        page: 1,
+        pages: 1,
+        per_page: 100,
+        total: 2,
+      },
+      [
+        {
+          indicator: {
+            id: 'SP.TEST',
+            value: 'Test Indicator',
+          },
+          country: {
+            id: 'US',
+            value: 'United States',
+          },
+          countryiso3code: 'USA',
+          date: '2025',
+          value: null,
+          unit: '',
+        },
+        {
+          indicator: {
+            id: 'SP.TEST',
+            value: 'Test Indicator',
+          },
+          country: {
+            id: 'US',
+            value: 'United States',
+          },
+          countryiso3code: 'USA',
+          date: '2024',
+          value: null,
+          unit: '',
+        },
+      ],
+    ]);
+  });
+  
+  it('should fetch the country quick stats', () => {
+    service.getQuickStats('JP').subscribe((indicators) => {
+      expect(indicators).toHaveLength(4);
+
+      expect(indicators.map((indicator) => indicator.id)).toEqual([
+        'SP.POP.TOTL',
+        'NY.GDP.MKTP.CD',
+        'NY.GDP.PCAP.CD',
+        'SP.DYN.LE00.IN',
+      ]);
+    });
+
+    const requests = httpTesting.match(
+      (request) =>
+        request.url.startsWith(
+          'https://api.worldbank.org/v2/country/JP/indicator/',
+        ),
+    );
+
+    expect(requests).toHaveLength(4);
+
+    requests.forEach((request, index) => {
+      request.flush([
+        {
+          page: 1,
+          pages: 1,
+          per_page: 100,
+          total: 1,
+        },
+        [
+          {
+            indicator: {
+              id: [
+                'SP.POP.TOTL',
+                'NY.GDP.MKTP.CD',
+                'NY.GDP.PCAP.CD',
+                'SP.DYN.LE00.IN',
+              ][index],
+              value: 'Test Indicator',
+            },
+            country: {
+              id: 'JP',
+              value: 'Japan',
+            },
+            countryiso3code: 'JPN',
+            date: '2023',
+            value: 100,
+            unit: '',
+          },
+        ],
+      ]);
+    });
+  });
 });

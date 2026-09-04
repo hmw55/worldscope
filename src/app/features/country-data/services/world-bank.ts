@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { forkJoin, map, Observable } from 'rxjs';
+import { CountryIndicator, WorldBankIndicatorApiResponse } from '../models/country-indicator';
 
 export interface WorldBankCountry {
   id: string;
@@ -62,4 +63,68 @@ export class WorldBankService {
         }),
       );
   }
+
+  getLatestIndicator(
+    countryCode: string,
+    indicatorId: string,
+    label: string,
+    shortLabel: string,
+    unit: string,
+  ): Observable<CountryIndicator> {
+    return this.http
+        .get<WorldBankIndicatorApiResponse>(
+        `${this.baseUrl}/country/${countryCode}/indicator/${indicatorId}?format=json&date=2015:2030&per_page=100`,
+        )
+        .pipe(
+        map((response) => {
+            const observations = response[1] ?? [];
+
+            const latest = observations.find(
+            (observation) => observation.value !== null,
+            );
+
+            return {
+            id: indicatorId,
+            label,
+            shortLabel,
+            unit,
+            value: latest?.value ?? null,
+            year: latest ? Number(latest.date) : null,
+            };
+        }),
+      );
+    }
+
+getQuickStats(countryCode: string): Observable<CountryIndicator[]> {
+  return forkJoin([
+    this.getLatestIndicator(
+      countryCode,
+      'SP.POP.TOTL',
+      'Population',
+      'Population',
+      'people',
+    ),
+    this.getLatestIndicator(
+      countryCode,
+      'NY.GDP.MKTP.CD',
+      'Gross Domestic Product',
+      'GDP',
+      'USD',
+    ),
+    this.getLatestIndicator(
+      countryCode,
+      'NY.GDP.PCAP.CD',
+      'GDP per Capita',
+      'GDP per Capita',
+      'USD',
+    ),
+    this.getLatestIndicator(
+      countryCode,
+      'SP.DYN.LE00.IN',
+      'Life Expectancy',
+      'Life Expectancy',
+      'years',
+    ),
+  ]);
+} 
 }
