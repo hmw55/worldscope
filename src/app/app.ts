@@ -1,7 +1,10 @@
 import { Component, inject, signal } from '@angular/core';
 
 import { CountryIndicator } from './features/country-data/models/country-indicator';
-import { WorldBankService, WorldBankCountry } from './features/country-data/services/world-bank';
+import {
+  WorldBankCountry,
+  WorldBankService,
+} from './features/country-data/services/world-bank';
 import { WorldMap } from './features/map/components/world-map/world-map';
 import { MapCountry } from './features/map/models/map-country';
 
@@ -23,14 +26,22 @@ export class App {
   readonly areQuickStatsLoading = signal(false);
   readonly hasQuickStatsError = signal(false);
 
+  readonly developmentIndicators = signal<CountryIndicator[]>([]);
+  readonly areDevelopmentIndicatorsLoading = signal(false);
+  readonly hasDevelopmentIndicatorsError = signal(false);
+  readonly selectedIndicator = signal<CountryIndicator | null>(null);
+
   onCountrySelected(country: MapCountry): void {
     this.selectedCountry.set(country);
 
     this.countryDetails.set(null);
     this.quickStats.set([]);
+    this.developmentIndicators.set([]);
+    this.selectedIndicator.set(null);
 
     this.hasCountryError.set(false);
     this.hasQuickStatsError.set(false);
+    this.hasDevelopmentIndicatorsError.set(false);
 
     if (!country.iso2Code) {
       return;
@@ -38,6 +49,7 @@ export class App {
 
     this.isCountryLoading.set(true);
     this.areQuickStatsLoading.set(true);
+    this.areDevelopmentIndicatorsLoading.set(true);
 
     this.worldBankService.getCountry(country.iso2Code).subscribe({
       next: (details) => {
@@ -60,6 +72,24 @@ export class App {
         this.areQuickStatsLoading.set(false);
       },
     });
+
+    this.worldBankService
+      .getDevelopmentIndicators(country.iso2Code)
+      .subscribe({
+        next: (indicators) => {
+          this.developmentIndicators.set(indicators);
+          this.selectedIndicator.set(indicators[0] ?? null);
+          this.areDevelopmentIndicatorsLoading.set(false);
+        },
+        error: () => {
+          this.hasDevelopmentIndicatorsError.set(true);
+          this.areDevelopmentIndicatorsLoading.set(false);
+        },
+      });
+  }
+
+  selectIndicator(indicator: CountryIndicator): void {
+    this.selectedIndicator.set(indicator);
   }
 
   formatIndicator(indicator: CountryIndicator): string {
@@ -96,5 +126,23 @@ export class App {
         return new Intl.NumberFormat('en-US').format(indicator.value);
     }
   }
-}
 
+  formatDevelopmentIndicator(indicator: CountryIndicator): string {
+    if (indicator.value === null) {
+      return '—';
+    }
+
+    switch (indicator.unit) {
+      case '%':
+        return `${indicator.value.toFixed(1)}%`;
+
+      case 't':
+        return `${indicator.value.toFixed(1)} t`;
+
+      default:
+        return new Intl.NumberFormat('en-US', {
+          maximumFractionDigits: 1,
+        }).format(indicator.value);
+    }
+  }
+}

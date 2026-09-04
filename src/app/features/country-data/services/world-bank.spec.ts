@@ -275,4 +275,60 @@ describe('WorldBankService', () => {
       ]);
     });
   });
+
+  it('should fetch development indicators', () => {
+    service.getDevelopmentIndicators('JP').subscribe((indicators) => {
+      expect(indicators).toHaveLength(4);
+
+      expect(indicators.map((indicator) => indicator.id)).toEqual([
+        'SL.UEM.TOTL.ZS',
+        'EN.GHG.CO2.PC.CE.AR5',
+        'SP.URB.TOTL.IN.ZS',
+        'IT.NET.USER.ZS',
+      ]);
+    });
+
+    const requests = httpTesting.match(
+      (request) =>
+        request.url.startsWith(
+          'https://api.worldbank.org/v2/country/JP/indicator/',
+        ),
+    );
+
+    expect(requests).toHaveLength(4);
+
+    const indicatorIds = [
+      'SL.UEM.TOTL.ZS',
+      'EN.GHG.CO2.PC.CE.AR5',
+      'SP.URB.TOTL.IN.ZS',
+      'IT.NET.USER.ZS',
+    ];
+
+    requests.forEach((request, index) => {
+      request.flush([
+        {
+          page: 1,
+          pages: 1,
+          per_page: 100,
+          total: 1,
+        },
+        [
+          {
+            indicator: {
+              id: indicatorIds[index],
+              value: 'Test Indicator',
+            },
+            country: {
+              id: 'JP',
+              value: 'Japan',
+            },
+            countryiso3code: 'JPN',
+            date: '2024',
+            value: 10,
+            unit: '',
+          },
+        ],
+      ]);
+    });
+  });
 });
