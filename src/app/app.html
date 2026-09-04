@@ -11,16 +11,10 @@
       </span>
     </a>
 
-    <div class="search-shell">
-      <span class="search-icon" aria-hidden="true">⌕</span>
-      <input
-        type="search"
-        placeholder="Search countries..."
-        aria-label="Search countries"
-        disabled
-      />
-      <span class="coming-soon">Coming soon</span>
-    </div>
+    <app-country-search
+      [countries]="countries()"
+      (countrySelected)="onCountrySelected($event)"
+    />
 
     <nav class="topbar-nav" aria-label="Primary navigation">
       <a href="#about">About</a>
@@ -55,8 +49,10 @@
       </div>
 
       <div class="map-workspace">
-        <app-world-map 
+        <app-world-map
+          [selectedCountryCode]="selectedCountry()?.iso3Code ?? null"
           (countrySelected)="onCountrySelected($event)"
+          (countriesLoaded)="onCountriesLoaded($event)"
         />
       </div>
     </section>

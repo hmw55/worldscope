@@ -1,0 +1,55 @@
+<div class="search-shell">
+  <span class="search-icon" aria-hidden="true">⌕</span>
+
+  <input
+    type="search"
+    placeholder="Search countries..."
+    aria-label="Search countries"
+    role="combobox"
+    aria-autocomplete="list"
+    aria-controls="country-search-results"
+    [attr.aria-expanded]="searchQuery() ? 'true' : 'false'"
+    [attr.aria-activedescendant]="
+      activeSearchIndex() >= 0
+        ? 'country-result-' + activeSearchIndex()
+        : null
+    "
+    [value]="searchQuery()"
+    (input)="updateSearchQuery($any($event.target).value)"
+    (keydown)="handleSearchKeydown($event)"
+  />
+
+  @if (searchQuery()) {
+    <div
+      class="search-results"
+      id="country-search-results"
+      role="listbox"
+      aria-label="Country search results"
+    >
+      @if (filteredCountries().length > 0) {
+        @for (
+          country of filteredCountries();
+          track country.iso3Code;
+          let index = $index
+        ) {
+          <button
+            type="button"
+            class="search-result"
+            role="option"
+            [id]="'country-result-' + index"
+            [attr.aria-selected]="activeSearchIndex() === index"
+            [class.search-result-active]="activeSearchIndex() === index"
+            (click)="selectSearchResult(country)"
+          >
+            <span>{{ country.name }}</span>
+            <small>{{ country.region }}</small>
+          </button>
+        }
+      } @else {
+        <div class="search-empty">
+          No countries found.
+        </div>
+      }
+    </div>
+  }
+</div>
