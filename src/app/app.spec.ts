@@ -3,12 +3,14 @@ import { of } from 'rxjs';
 
 import { App } from './app';
 import { WorldBankService } from './features/country-data/services/world-bank';
+import { CountryIndicator } from './features/country-data/models/country-indicator';
 import { MapCountry } from './features/map/models/map-country';
 
 describe('App', () => {
   const worldBankServiceMock = {
     getCountry: vi.fn(),
     getQuickStats: vi.fn(),
+    getDevelopmentIndicators: vi.fn(),
   };
 
   beforeEach(async () => {
@@ -62,6 +64,43 @@ describe('App', () => {
       ]),
     );
 
+  worldBankServiceMock.getDevelopmentIndicators.mockReturnValue(
+    of([
+      {
+        id: 'SL.UEM.TOTL.ZS',
+        label: 'Unemployment Rate',
+        shortLabel: 'Unemployment',
+        unit: '%',
+        value: 2.6,
+        year: 2024,
+      },
+      {
+        id: 'EN.GHG.CO2.PC.CE.AR5',
+        label: 'CO₂ Emissions per Capita',
+        shortLabel: 'CO₂ / Capita',
+        unit: 't',
+        value: 7.8,
+        year: 2023,
+      },
+      {
+        id: 'SP.URB.TOTL.IN.ZS',
+        label: 'Urban Population',
+        shortLabel: 'Urban Population',
+        unit: '%',
+        value: 92,
+        year: 2024,
+      },
+      {
+        id: 'IT.NET.USER.ZS',
+        label: 'Individuals Using the Internet',
+        shortLabel: 'Internet Users',
+        unit: '%',
+        value: 87,
+        year: 2023,
+      },
+    ]),
+  );
+
     await TestBed.configureTestingModule({
       imports: [App],
       providers: [
@@ -100,7 +139,7 @@ describe('App', () => {
     expect(navigation?.textContent).toContain('About');
   });
 
-  it('should load country details and quick stats when a country is selected', () => {
+  it('should load country data and indicators when a country is selected', () => {
     const fixture = TestBed.createComponent(App);
     const app = fixture.componentInstance;
 
@@ -127,5 +166,33 @@ describe('App', () => {
     expect(compiled.textContent).toContain('Japan');
     expect(compiled.textContent).toContain('Tokyo');
     expect(compiled.textContent).toContain('Population');
+
+    expect(
+      worldBankServiceMock.getDevelopmentIndicators,
+    ).toHaveBeenCalledWith('JP');
+
+    expect(app.developmentIndicators()).toHaveLength(4);
+    expect(app.selectedIndicator()?.id).toBe('SL.UEM.TOTL.ZS');
+
+    expect(compiled.textContent).toContain('Unemployment');
+    expect(compiled.textContent).toContain('2.6%');
+  });
+
+  it('should change the selected development indicator', () => {
+    const fixture = TestBed.createComponent(App);
+    const app = fixture.componentInstance;
+
+    const indicator: CountryIndicator = {
+      id: 'IT.NET.USER.ZS',
+      label: 'Individuals Using the Internet',
+      shortLabel: 'Internet Users',
+      unit: '%',
+      value: 87,
+      year: 2023,
+    };
+
+    app.selectIndicator(indicator);
+
+    expect(app.selectedIndicator()).toEqual(indicator);
   });
 });

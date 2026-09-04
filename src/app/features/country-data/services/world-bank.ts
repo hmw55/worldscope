@@ -95,36 +95,71 @@ export class WorldBankService {
       );
     }
 
-getQuickStats(countryCode: string): Observable<CountryIndicator[]> {
-  return forkJoin([
-    this.getLatestIndicator(
-      countryCode,
-      'SP.POP.TOTL',
-      'Population',
-      'Population',
-      'people',
-    ),
-    this.getLatestIndicator(
-      countryCode,
-      'NY.GDP.MKTP.CD',
-      'Gross Domestic Product',
-      'GDP',
-      'USD',
-    ),
-    this.getLatestIndicator(
-      countryCode,
-      'NY.GDP.PCAP.CD',
-      'GDP per Capita',
-      'GDP per Capita',
-      'USD',
-    ),
-    this.getLatestIndicator(
-      countryCode,
-      'SP.DYN.LE00.IN',
-      'Life Expectancy',
-      'Life Expectancy',
-      'years',
-    ),
-  ]);
-} 
+  getQuickStats(countryCode: string): Observable<CountryIndicator[]> {
+    return forkJoin([
+      this.getLatestIndicator(
+        countryCode,
+        'SP.POP.TOTL',
+        'Population',
+        'Population',
+        'people',
+      ),
+      this.getLatestIndicator(
+        countryCode,
+        'NY.GDP.MKTP.CD',
+        'Gross Domestic Product',
+        'GDP',
+        'USD',
+      ),
+      this.getLatestIndicator(
+        countryCode,
+        'NY.GDP.PCAP.CD',
+        'GDP per Capita',
+        'GDP per Capita',
+        'USD',
+      ),
+      this.getLatestIndicator(
+        countryCode,
+        'SP.DYN.LE00.IN',
+        'Life Expectancy',
+        'Life Expectancy',
+        'years',
+      ),
+    ]);
+  } 
+
+  getDevelopmentIndicators(
+    countryCode: string,
+  ): Observable<CountryIndicator[]> {
+    return forkJoin([
+      this.getLatestIndicator(
+        countryCode,
+        'SL.UEM.TOTL.ZS',
+        'Unemployment Rate',
+        'Unemployment',
+        '%',
+      ),
+      this.getLatestIndicator(
+        countryCode,
+        'EN.GHG.CO2.PC.CE.AR5',
+        'CO₂ Emissions per Capita',
+        'CO₂ / Capita',
+        't',
+      ),
+      this.getLatestIndicator(
+        countryCode,
+        'SP.URB.TOTL.IN.ZS',
+        'Urban Population',
+        'Urban Population',
+        '%',
+      ),
+      this.getLatestIndicator(
+        countryCode,
+        'IT.NET.USER.ZS',
+        'Individuals Using the Internet',
+        'Internet Users',
+        '%',
+      ),
+    ]);
+  }
 }

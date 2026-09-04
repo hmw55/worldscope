@@ -156,12 +156,51 @@
           <span class="panel-label">Indicators</span>
         </div>
 
-        <div class="indicator-placeholder">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
+        @if (!selectedCountry()) {
+          <div class="indicator-placeholder">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        } @else if (areDevelopmentIndicatorsLoading()) {
+          <div class="indicator-status">
+            Loading development indicators...
+          </div>
+        } @else if (hasDevelopmentIndicatorsError()) {
+          <div class="indicator-status indicator-status-error">
+            Indicator data unavailable.
+          </div>
+        } @else {
+          <div class="indicator-list">
+            @for (indicator of developmentIndicators(); track indicator.id) {
+              <button
+                class="indicator-card"
+                type="button"
+                [class.indicator-card-selected]="
+                  selectedIndicator()?.id === indicator.id
+                "
+                (click)="selectIndicator(indicator)"
+              >
+                <span class="indicator-card-label">
+                  {{ indicator.shortLabel }}
+                </span>
+
+                <strong>
+                  {{ formatDevelopmentIndicator(indicator) }}
+                </strong>
+
+                <span class="indicator-card-year">
+                  @if (indicator.year !== null) {
+                    {{ indicator.year }}
+                  } @else {
+                    No data
+                  }
+                </span>
+              </button>
+            }
+          </div>
+        }
       </section>
 
       <section class="panel trend-panel">
