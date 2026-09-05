@@ -83,15 +83,16 @@
   display: flex;
   justify-content: flex-end;
 
-  a {
-    color: var(--text-muted);
-    font-size: 0.8rem;
-    text-decoration: none;
+  .about-link {
+    padding: 0;
 
-    &:hover,
-    &:focus-visible {
-      color: var(--text);
-    }
+    color: inherit;
+    font: inherit;
+
+    background: none;
+    border: 0;
+
+    cursor: pointer;
   }
 }
 

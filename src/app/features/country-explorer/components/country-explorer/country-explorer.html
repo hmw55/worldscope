@@ -1,0 +1,153 @@
+<section class="country-explorer panel">
+  <div class="panel-heading">
+    <span class="panel-label">Country Explorer</span>
+  </div>
+
+  @if (!selectedCountryCode()) {
+    <div class="empty-state">
+      <p>Select a country to explore its major cities.</p>
+    </div>
+  } @else if (cities().length === 0) {
+    <div class="empty-state">
+      <p>No city data is available for this country.</p>
+    </div>
+  } @else {
+    <div class="explorer-layout">
+      <aside class="city-navigation" aria-label="Major cities">
+        <div class="city-navigation-heading">
+          <span>Major Cities</span>
+          <span>{{ cities().length }}</span>
+        </div>
+
+        <div class="city-list">
+          @for (city of cities(); track city.name) {
+            <button
+              type="button"
+              class="city-card"
+              [class.selected]="selectedCity()?.name === city.name"
+              (click)="selectCity(city)"
+            >
+              <span class="city-card-main">
+                <strong>{{ city.name }}</strong>
+
+                @if (city.isCapital) {
+                  <span class="capital-badge">
+                    Capital
+                  </span>
+                }
+              </span>
+
+              @if (city.population !== null) {
+                <span class="city-population">
+                  {{ city.population.toLocaleString() }}
+                </span>
+              }
+            </button>
+          }
+        </div>
+      </aside>
+
+      @if (selectedCity(); as city) {
+        <section class="city-details">
+          <header class="city-hero">
+            <div class="city-identity">
+              <span class="detail-label">Selected City</span>
+
+              <div class="city-title-row">
+                <h3>{{ city.name }}</h3>
+
+                @if (city.isCapital) {
+                  <span class="hero-capital-badge">
+                    National Capital
+                  </span>
+                }
+              </div>
+
+              <span class="local-time">
+                {{ currentDay() }} · {{ currentTime() }}
+              </span>
+            </div>
+
+            <div class="weather-hero">
+              @if (weatherLoading()) {
+                <span class="weather-status">
+                  Loading weather…
+                </span>
+              } @else if (weatherError()) {
+                <span class="weather-status">
+                  Weather unavailable
+                </span>
+              } @else if (weather(); as currentWeather) {
+                <div class="temperature">
+                  {{ currentWeather.temperature.toFixed(0) }}°
+                </div>
+
+                <div class="weather-copy">
+                  <strong>
+                    {{
+                      weatherDescription(
+                        currentWeather.weatherCode
+                      )
+                    }}
+                  </strong>
+
+                  <span>
+                    Feels like
+                    {{
+                      currentWeather.apparentTemperature.toFixed(0)
+                    }}°F
+                  </span>
+                </div>
+              }
+            </div>
+          </header>
+
+          <div class="telemetry">
+            <div class="telemetry-card population-card">
+              <span class="telemetry-label">Population</span>
+
+              <strong>
+                @if (city.population !== null) {
+                  {{ city.population.toLocaleString() }}
+                } @else {
+                  —
+                }
+              </strong>
+            </div>
+
+            <div class="telemetry-card">
+              <span class="telemetry-label">Latitude</span>
+              <strong>{{ city.latitude.toFixed(4) }}°</strong>
+            </div>
+
+            <div class="telemetry-card">
+              <span class="telemetry-label">Longitude</span>
+              <strong>{{ city.longitude.toFixed(4) }}°</strong>
+            </div>
+
+            <div class="telemetry-card">
+              <span class="telemetry-label">Timezone</span>
+              <strong>
+                {{ city.timezone ?? 'Unavailable' }}
+              </strong>
+            </div>
+
+            @if (weather(); as currentWeather) {
+              <div class="telemetry-card humidity-card">
+                <span class="telemetry-label">Humidity</span>
+                <strong>{{ currentWeather.humidity }}%</strong>
+              </div>
+
+              <div class="telemetry-card wind-card">
+                <span class="telemetry-label">Wind</span>
+                <strong>
+                  {{ currentWeather.windSpeed.toFixed(0) }} mph
+                </strong>
+              </div>
+            }
+          </div>
+        </section>
+      }
+    </div>
+  }
+</section>

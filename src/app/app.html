@@ -17,7 +17,13 @@
     />
 
     <nav class="topbar-nav" aria-label="Primary navigation">
-      <a href="#about">About</a>
+      <button
+        type="button"
+        class="about-link"
+        (click)="scrollToAbout()"
+      >
+        About
+      </button>
     </nav>
   </header>
 
@@ -75,6 +81,10 @@
       />
     </aside>
   </main>
+
+  <app-country-explorer
+    [selectedCountryCode]="selectedCountry()?.iso3Code ?? null"
+  />
 
   <app-about-section id="about" />
 
