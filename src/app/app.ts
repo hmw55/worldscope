@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 
 import { AboutSection } from './features/about/components/about-section/about-section';
+import { CountryExplorer } from './features/country-explorer/components/country-explorer/country-explorer';
 import { CountryPanel } from './features/country-data/components/country-panel/country-panel';
 import { IndicatorsPanel } from './features/country-data/components/indicators-panel/indicators-panel';
 import { TrendPanel } from './features/country-data/components/trend-panel/trend-panel';
@@ -25,6 +26,7 @@ import { CountrySearch } from './features/search/components/country-search/count
     IndicatorsPanel,
     TrendPanel,
     AboutSection,
+    CountryExplorer,
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
@@ -164,6 +166,15 @@ export class App {
           this.hasIndicatorHistoryError.set(true);
           this.isIndicatorHistoryLoading.set(false);
         },
+      });
+  }
+
+  scrollToAbout(): void {
+    document
+      .getElementById('about')
+      ?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
       });
   }
 }
