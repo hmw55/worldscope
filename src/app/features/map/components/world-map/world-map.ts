@@ -131,7 +131,7 @@ export class WorldMap implements OnInit {
 
   private loadMap(): void {
     this.http
-      .get<CountryFeatureCollection>('/data/countries.geojson')
+      .get<CountryFeatureCollection>('data/countries.geojson')
       .subscribe({
         next: (data) => {
           const countries = this.createCountries(data.features);
