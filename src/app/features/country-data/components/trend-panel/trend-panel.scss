@@ -12,7 +12,6 @@
 .trend-empty {
   display: flex;
   flex: 1;
-  min-height: 16rem;
   padding: 1rem;
   flex-direction: column;
 }
@@ -109,6 +108,7 @@
 .trend-chart {
   width: 100%;
   min-height: 9rem;
+  flex: 1;
   overflow: visible;
 }
 
