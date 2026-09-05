@@ -196,6 +196,7 @@ The generated dataset currently contains approximately 880 cities across more th
 | World Bank API | Country statistics and historical indicators |
 | Natural Earth | Geographic and populated-place datasets |
 | Open-Meteo | Current city weather |
+| Vitest | Unit and component testing |
 
 ---
 
