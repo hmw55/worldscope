@@ -107,11 +107,17 @@
   gap: 1rem;
 }
 
-.country-column,
-.data-column {
+.country-column {
   display: grid;
   min-height: 0;
   grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.data-column {
+  display: grid;
+  min-height: 0;
+  grid-template-rows: auto minmax(0, 1fr);
   gap: 1rem;
 }
 
@@ -219,7 +225,12 @@
   .data-column {
     grid-column: 1 / -1;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto;
+    grid-template-rows: 1fr;
+    align-items: stretch;
+  }
+
+  .data-column > * {
+    height: 100%;
   }
 }
 
