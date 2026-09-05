@@ -10,15 +10,7 @@ This project is a ground-up evolution of a much smaller concept I originally bui
 
 ## Preview
 
-> Screenshots coming soon.
-
-### Original Coursework Concept
-
-<!-- Add original project screenshot here -->
-
-### WorldScope
-
-<!-- Add current WorldScope screenshot here -->
+![WorldScope desktop application](docs/images/worldscope-desktop.png)
 
 ---
 
@@ -109,6 +101,35 @@ Changing the selected city automatically updates its local context and current w
 
 ---
 
+## Responsive Design
+
+WorldScope adapts its data-dense interface across desktop, tablet, and mobile layouts while preserving the same exploration workflow.
+
+<table>
+  <tr>
+    <td width="65%">
+      <img
+        src="docs/images/worldscope-tablet.png"
+        alt="WorldScope tablet layout"
+      />
+    </td>
+    <td width="35%">
+      <img
+        src="docs/images/worldscope-mobile.png"
+        alt="WorldScope mobile layout"
+      />
+    </td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Tablet</strong></td>
+    <td align="center"><strong>Mobile</strong></td>
+  </tr>
+</table>
+
+On larger screens, the application presents country context, the world map, indicators, and historical trends as a unified dashboard. At narrower widths, those same tools reorganize into tablet and mobile layouts without removing functionality.
+
+---
+
 ## Data Sources
 
 WorldScope combines multiple public geographic and statistical data sources.
@@ -185,24 +206,25 @@ The generated dataset currently contains approximately 880 cities across more th
 
 | Technology | Purpose |
 | --- | --- |
-| Angular | Application framework and component architecture |
-| TypeScript | Application language and type safety |
+| Angular 22 | Application framework and component architecture |
+| TypeScript 6 | Application language and type safety |
 | Angular Signals | Reactive UI and application state |
 | RxJS | Asynchronous data streams and API operations |
 | D3 Geo | Geographic projection and SVG path generation |
+| D3 Selection | SVG interaction |
 | D3 Zoom | Map zooming and panning |
 | SVG | Interactive map and historical trend visualization |
 | SCSS | Component and application styling |
+| Vitest | Unit and component testing |
 | World Bank API | Country statistics and historical indicators |
 | Natural Earth | Geographic and populated-place datasets |
 | Open-Meteo | Current city weather |
-| Vitest | Unit and component testing |
 
 ---
 
 ## Architecture
 
-WorldScope is organized around feature-oriented Angular modules and components.
+WorldScope uses a feature-oriented Angular structure:
 
 ```text
 src/app/
@@ -220,6 +242,8 @@ src/app/
 Feature directories contain their own components, models, services, and supporting data where appropriate.
 
 The root application coordinates shared state such as the currently selected country, while individual components remain focused on presentation or feature-specific behavior.
+
+Angular signals provide reactive application state, while RxJS handles asynchronous API operations.
 
 ---
 
@@ -248,7 +272,7 @@ The resulting TypeScript data is written to:
 src/app/features/country-explorer/data/major-cities.ts
 ```
 
-Temporary source data used during generation is not intended to be committed to the repository.
+Temporary source data used during generation is not committed to the repository.
 
 ---
 
@@ -328,36 +352,56 @@ Run the test suite with:
 npm test
 ```
 
-A production build can be used to verify compilation and bundling:
-
-```bash
-npx ng build
-```
-
 ---
 
 ## Project Evolution
 
 WorldScope originated from the general concept of a country-information application I created while completing my bachelor's degree.
 
-The portfolio version is not a publication of that coursework solution. Instead, I returned to the underlying idea and independently rebuilt it from the ground up.
+The original coursework project was a small Angular application centered around an interactive SVG world map and the World Bank API. Clicking a country displayed a limited set of information, including its name, capital, region, income classification, and geographic coordinates.
 
-The new application introduces a different visual design and architecture alongside substantially expanded functionality, including:
+### Original Coursework Concept
 
-- A new interactive geographic implementation
-- D3-based projection, zooming, and panning
-- Search and keyboard navigation
-- Expanded World Bank data integration
-- Historical indicator visualization
+![Original Angular world map coursework project](docs/images/worldscope-original.png)
+
+While the original project accomplished the requirements of the assignment, it had significant limitations as a user-facing application:
+
+- The layout was not responsive.
+- On smaller screens, the fixed-size map extended beyond its container and portions of the world became inaccessible.
+- The map could not be panned or zoomed, so users had no way to navigate to countries that were clipped from view.
+- Selecting a country displayed its information, but the map provided no persistent visual indication of which country was currently selected.
+- Country information was limited to a small set of basic metadata.
+- There was no country search, historical data visualization, city-level exploration, or broader statistical context.
+- The interaction model was primarily designed around desktop mouse input rather than keyboard and accessible interaction patterns.
+
+The portfolio version is not a publication or continuation of that coursework solution. Instead, I returned to the underlying idea and independently rebuilt it from the ground up, treating the limitations of the original project as design and engineering problems to solve.
+
+### WorldScope Today
+
+![WorldScope portfolio application](docs/images/worldscope-desktop.png)
+
+The rebuilt WorldScope transforms the original map concept into a responsive global data exploration application.
+
+The map was replaced with a new geographic implementation using Natural Earth data and D3. Countries now have distinct hover, keyboard-focus, and persistent selection states, while zooming and panning allow the map to remain navigable across different viewport sizes. Country search provides an additional navigation method independent of the map.
+
+The data experience was also expanded substantially. Instead of displaying only basic country metadata, WorldScope combines current statistics, development indicators, historical trends, and major-city context from multiple public data sources.
+
+Key improvements include:
+
+- Responsive desktop, tablet, and mobile layouts
+- D3-based geographic projection, zooming, and panning
+- Persistent visual indication of the selected country
+- Country search with keyboard navigation
+- Expanded World Bank statistics and development indicators
+- Interactive historical trend visualization
+- Major-city exploration using processed Natural Earth data
+- Local time and timezone context
+- Current weather integration through Open-Meteo
 - Feature-oriented Angular architecture
-- Natural Earth city-data preprocessing
-- Country-to-city exploration
-- Live local time
-- Current weather integration
-- Expanded accessibility support
-- Responsive application design
+- Expanded keyboard and screen-reader accessibility
+- Explicit loading, empty, error, hover, focus, and selection states
 
-The before-and-after screenshots above document that evolution without distributing the original coursework source code.
+The screenshots above document the evolution of the underlying concept without distributing the original coursework source code.
 
 ---
 
@@ -367,7 +411,7 @@ WorldScope uses a dark analytics-inspired interface designed to keep dense stati
 
 The interface separates application accent colors from semantic data colors. Magenta is used for primary interaction and selection, while cyan, green, yellow, orange, purple, and pink distinguish different types of data throughout the application.
 
-The visual hierarchy is designed around progressive exploration:
+The visual hierarchy follows progressive exploration:
 
 ```text
 World → Country → Indicator → Historical Trend
