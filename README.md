@@ -6,6 +6,10 @@ WorldScope turns global data into an interactive exploration experience. Users c
 
 This project is a ground-up evolution of a much smaller concept I originally built during my bachelor's coursework. The current implementation was independently redesigned and rebuilt as a portfolio application with a new architecture, expanded functionality, new data sources, and a completely new interface.
 
+## Live Demo
+
+[View WorldScope](https://hmw55.github.io/worldscope/)
+
 ---
 
 ## Preview
